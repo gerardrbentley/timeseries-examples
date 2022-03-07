@@ -2,16 +2,17 @@ import streamlit as st
 "## Import Necessary Libraries"
 import pandas as pd
 import plotly.express as px
+
 from pathlib import Path
 
-"## Get list of files for lecture 01"
+"## Get path to file"
 data_folder = Path('data')
-files = list(data_folder.glob('01_*'))
+files = list(data_folder.glob('sales*'))
 files
 
 "## Load in the excel data to a pandas Dataframe"
 excel_path = files[0]
-excel_data = pd.read_excel(excel_path, sheet_name='Sheet2')
+excel_data = pd.read_excel(excel_path, sheet_name='Sheet1')
 "Show some example rows"
 excel_data.iloc[:5]
 
@@ -22,34 +23,38 @@ for column in excel_data:
     non_null_count
     excel_data[column].dtype
 
+"## Convert to datetime"
+excel_data['Month'] = pd.to_datetime(excel_data['Month'])
+excel_data['Month'].dtype
+
 "## Show a Line Chart"
-line_chart = px.line(excel_data, x='Years', y='Sales')
+line_chart = px.line(excel_data, x='Month', y='Sales')
 st.plotly_chart(line_chart)
 
 "## Use Pandas Dataframe index with a timeseries"
-monthly_sales = excel_data.set_index('Years', drop=False)
+monthly_sales = excel_data.set_index('Month', drop=False)
 monthly_sales
 
 "## Pandas dt functions"
 "[See More in the docs](https://pandas.pydata.org/docs/user_guide/timeseries.html#time-date-components)"
 
-monthly_sales['year'] = monthly_sales['Years'].dt.year
-monthly_sales['quarter'] = monthly_sales['Years'].dt.quarter
+monthly_sales['year'] = monthly_sales['Month'].dt.year
+monthly_sales['quarter'] = monthly_sales['Month'].dt.quarter
 monthly_sales.iloc[:5]
 
 "## Line Plot highlighting the year"
 
 monthly_sales.year.dtype
-yearly_plot = px.line(monthly_sales, x='Years', y='Sales', color='year')
+yearly_plot = px.line(monthly_sales, x='Month', y='Sales', color='year')
 st.plotly_chart(yearly_plot)
 
 "## Area Plot"
-area_sales = px.area(monthly_sales, x='Years', y='Sales')
+area_sales = px.area(monthly_sales, x='Month', y='Sales')
 st.plotly_chart(area_sales)
 
 "## Area Plot highlighting the quarter"
 
-area_quarterly_sales = px.area(monthly_sales, x='Years', y='Sales', color='quarter')
+area_quarterly_sales = px.area(monthly_sales, x='Month', y='Sales', color='quarter')
 st.plotly_chart(area_quarterly_sales)
 
 "## Yearly sales"
