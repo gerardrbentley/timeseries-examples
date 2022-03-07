@@ -5,16 +5,44 @@ import plotly.express as px
 
 from pathlib import Path
 
+"""## Data Source
+
+United States Prime Supplier of Sales Volumes
+
+via US Energy Information Administration [online](https://www.eia.gov/petroleum/data.php)
+
+Monthly release date: February 18, 2022
+
+Sales of petroleum products by 
+
+- refiners
+- gas plant operators
+- importers
+- large inter-state distributors 
+
+into the final local markets of consumption by U.S.
+
+"""
+
+
 "## Get path to file"
 data_folder = Path('data')
-files = list(data_folder.glob('sales*'))
+files = list(data_folder.glob('sales_oil*'))
 files
 
 "## Load in the excel data to a pandas Dataframe"
 excel_path = files[0]
-excel_data = pd.read_excel(excel_path, sheet_name='Sheet1')
+excel_data = pd.read_excel(excel_path, sheet_name='Data 1', header=2)
 "Show some example rows"
 excel_data.iloc[:5]
+
+"We'll simplify our data a bit to just the Month and Total Sales"
+excel_data['Month'] = excel_data['Date']
+excel_data['Sales'] = excel_data['U.S. Total Gasoline All Sales/Deliveries by Prime Supplier (Thousand Gallons per Day)']
+excel_data = excel_data[['Month', 'Sales']]
+
+"And just take the past 10 years"
+excel_data = excel_data.iloc[-120:]
 
 "## Check out the types and names of the data we have"
 for column in excel_data:
@@ -23,9 +51,6 @@ for column in excel_data:
     non_null_count
     excel_data[column].dtype
 
-"## Convert to datetime"
-excel_data['Month'] = pd.to_datetime(excel_data['Month'])
-excel_data['Month'].dtype
 
 "## Show a Line Chart"
 line_chart = px.line(excel_data, x='Month', y='Sales')
