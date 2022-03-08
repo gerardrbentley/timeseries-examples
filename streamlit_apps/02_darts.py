@@ -19,11 +19,7 @@ conda install -c conda-forge -c pytorch u8darts-all
 """
 with st.expander("If that doesn't work..."):
     """\
-You can try with conda:
-
-`conda install -c conda-forge u8darts`
-
-Or install it without all of the models with pip (from [docs](https://unit8co.github.io/darts/#id3)):
+Install it without all of the models with pip (from [docs](https://unit8co.github.io/darts/#id3)):
 ```sh
 # Install core only (without neural networks, Prophet or AutoARIMA): 
 pip install u8darts
@@ -36,16 +32,16 @@ u8darts[prophet]
 
 # Install core + AutoARIMA: pip install 
 u8darts[pmdarima]
+```
 
+Install it without all of the models with conda:
 
-# Install darts with all available models (recommended): 
-conda install -c conda-forge -c pytorch u8darts-all
+```sh
+# Install core only (without neural networks, Prophet or AutoARIMA): 
+conda install -c conda-forge u8darts
 
 # Install core + neural networks (PyTorch): 
 conda install -c conda-forge -c pytorch u8darts-torch
-
-# Install core only (without neural networks, Prophet or AutoARIMA): 
-conda install -c conda-forge u8darts
 ```
 """
 
